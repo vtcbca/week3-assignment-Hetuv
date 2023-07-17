@@ -1,0 +1,251 @@
+Write a python script to perform CRUD operation on following table of "ESM.db" database:
+Employee ( eid, ename, dept, basic, branch).
+eid must be primary key.
+Department : Account, Inventory, IT, HR.
+
+1.Create table
+2.Insert 5 Records directly, 5 records using tuple and 5 records using taking input from user
+
+#creating table:
+
+import sqlite3 as sq
+con=sq.connect("c://sqlite3//ESM.db")
+cur=con.cursor()
+create="create table Employee(eid number primary key,ename text,dept text,basic number,branch text)"
+cur.execute(create)
+con.commit()
+
+#insert 5 record directly:
+
+in1="insert into Employee values(1,'om','hr',10000,'surat'),(2,'sai','it',5000,'kamrej'),(3,'ram','inventory',15000,'bardoli'),(4,'radha','account',20000,'vyara'),(5,'krishna','account',25000,'kamrej')"
+cur.execute(in1)
+con.commit()
+
+#insert 5 record using tuple:
+
+r2=[(6,'Ram','hr',29000,'bardoli'),(7,'Sita','account',12500,'vihan'),(8,'Gopi','it',16000,'navsari'),(9,'Sudama','inventory',20000,'bardoli'),(10,' Kans','hr',3000,'surat')]
+in2="insert into Employee values(?,?,?,?,?)"
+cur.executemany(in2,r2)
+con.commit()
+
+#insert 5 record wit user input:
+
+in3="insert into employee values(?,?,?,?,?)"
+l=[ ]
+for i in range(0,5):
+    n=int(input('Enter Employee Id:'))
+    name=input('Enter Employee Name:')
+    dept=input('Enter Department Name:')
+    basic=int(input('Enter Basic:'))
+    branch=input('Enter Branch:')
+    t=[n,name,dept,basic,branch]
+    l.append(t)
+cur.executemany(in3,l)
+con.commit()
+
+'''
+Enter Employee Id:11
+Enter Employee Name:Laxman
+Enter Department Name:it
+Enter Basic:6000
+Enter Branch:kamrej
+Enter Employee Id:12
+Enter Employee Name:Bharat
+Enter Department Name:hr
+Enter Basic:20000
+Enter Branch:vyara
+Enter Employee Id:13
+Enter Employee Name:Balram
+Enter Department Name:account
+Enter Basic:3000
+Enter Branch:kamrej
+Enter Employee Id:14
+Enter Employee Name:Sam
+Enter Department Name:inventory
+Enter Basic:6000
+Enter Branch:bardoli
+Enter Employee Id:15
+Enter Employee Name:Dev
+Enter Department Name:it
+Enter Basic:50000
+Enter Branch:kamrej
+'''
++---------------------------------------------+
+¦ eid ¦  ename  ¦   dept    ¦ basic ¦ branch  ¦
++-----+---------+-----------+-------+---------¦
+¦ 1   ¦ om      ¦ hr        ¦ 10000 ¦ surat   ¦
+¦ 2   ¦ sai     ¦ it        ¦ 5000  ¦ kamrej  ¦
+¦ 3   ¦ ram     ¦ inventory ¦ 15000 ¦ bardoli ¦
+¦ 4   ¦ radha   ¦ account   ¦ 20000 ¦ vyara   ¦
+¦ 5   ¦ krishna ¦ account   ¦ 25000 ¦ kamrej  ¦
+¦ 6   ¦ Ram     ¦ hr        ¦ 29000 ¦ bardoli ¦
+¦ 7   ¦ Sita    ¦ account   ¦ 12500 ¦ vihan   ¦
+¦ 8   ¦ Gopi    ¦ it        ¦ 16000 ¦ navsari ¦
+¦ 9   ¦ Sudama  ¦ inventory ¦ 20000 ¦ bardoli ¦
+¦ 10  ¦  Kans   ¦ hr        ¦ 3000  ¦ surat   ¦
+¦ 11  ¦ Laxman  ¦ it        ¦ 6000  ¦ kamrej  ¦
+¦ 12  ¦ Bharat  ¦ hr        ¦ 2000  ¦ vyara   ¦
+¦ 13  ¦ Balram  ¦ account   ¦ 3000  ¦ kamrej  ¦
+¦ 14  ¦ Sam     ¦ inventory ¦ 6000  ¦ bardoli ¦
+¦ 15  ¦ Dev     ¦ it        ¦ 50000 ¦ kamrej  ¦
++---------------------------------------------+
+
+3. Update records who are from "Surat" branch with increment in salary 10%:
+
+q1="update employee set basic=basic+basic*10/100 where branch is 'surat'"
+cur.execute(q1)
+con.commit()
+
+4. Print All records.
+
+q2="select * from Employee"
+cur.execute(q2)
+r=cur.fetchall()
+for i in r:
+    print(i)
+con.commit()
+
+output:
+(1, 'om', 'hr', 11000, 'surat')
+(2, 'sai', 'it', 5000, 'kamrej')
+(3, 'ram', 'inventory', 15000, 'bardoli')
+(4, 'radha', 'account', 20000, 'vyara')
+(5, 'krishna', 'account', 25000, 'kamrej')
+(6, 'Ram', 'hr', 29000, 'bardoli')
+(7, 'Sita', 'account', 12500, 'vihan')
+(8, 'Gopi', 'it', 16000, 'navsari')
+(9, 'Sudama', 'inventory', 20000, 'bardoli')
+(10, ' Kans', 'hr', 3300, 'surat')
+(11, 'Laxman', 'it', 6000, 'kamrej')
+(12, 'Bharat', 'hr', 2000, 'vyara')
+(13, 'Balram', 'account', 3000, 'kamrej')
+(14, 'Sam ', 'inventory', 6000, 'bardoli')
+(15, 'Dev', 'it', 50000, 'kamrej')
+
+5. Print records where dept is "HR" and "IT".
+
+q3="select * from Employee where dept='hr' or dept='it' "
+cur.execute(q3)
+r=cur.fetchall()
+for i in r:
+    print(i)
+con.commit()
+
+output:
+(1, 'om', 'hr', 11000, 'surat')
+(2, 'sai', 'it', 5000, 'kamrej')
+(6, 'Ram', 'hr', 29000, 'bardoli')
+(8, 'Gopi', 'it', 16000, 'navsari')
+(10, ' Kans', 'hr', 3300, 'surat')
+(11, 'Laxman', 'it', 6000, 'kamrej')
+(12, 'Bharat', 'hr', 2000, 'vyara')
+(15, 'Dev', 'it', 50000, 'kamrej')
+
+6. Print records in sorting order of department.
+
+q4="select * from Employee order by dept"
+cur.execute(q4)
+r=cur.fetchall()
+for i in r:
+    print(i)
+con.commit()
+
+output:
+(4, 'radha', 'account', 20000, 'vyara')
+(5, 'krishna', 'account', 25000, 'kamrej')
+(7, 'Sita', 'account', 12500, 'vihan')
+(13, 'Balram', 'account', 3000, 'kamrej')
+(1, 'om', 'hr', 11000, 'surat')
+(6, 'Ram', 'hr', 29000, 'bardoli')
+(10, ' Kans', 'hr', 3300, 'surat')
+(12, 'Bharat', 'hr', 2000, 'vyara')
+(3, 'ram', 'inventory', 15000, 'bardoli')
+(9, 'Sudama', 'inventory', 20000, 'bardoli')
+(14, 'Sam ', 'inventory', 6000, 'bardoli')
+(2, 'sai', 'it', 5000, 'kamrej')
+(8, 'Gopi', 'it', 16000, 'navsari')
+(11, 'Laxman', 'it', 6000, 'kamrej')
+(15, 'Dev', 'it', 50000, 'kamrej')
+
+7. Print records where basic is >6000.
+
+q5="select * from Employee where basic>6000"
+cur.execute(q5)
+r=cur.fetchall()
+for i in r:
+    print(i)
+con.commit()
+
+output:
+(1, 'om', 'hr', 11000, 'surat')
+(3, 'ram', 'inventory', 15000, 'bardoli')
+(4, 'radha', 'account', 20000, 'vyara')
+(5, 'krishna', 'account', 25000, 'kamrej')
+(6, 'Ram', 'hr', 29000, 'bardoli')
+(7, 'Sita', 'account', 12500, 'vihan')
+(8, 'Gopi', 'it', 16000, 'navsari')
+(9, 'Sudama', 'inventory', 20000, 'bardoli')
+(15, 'Dev', 'it', 50000, 'kamrej')
+
+8. Print records whrere employee name second character is "r".
+
+q6="select * from Employee where ename like '_r%'"
+cur.execute(q6)
+r=cur.fetchall()
+for i in r:
+    print(i)
+con.commit()
+
+output:
+(5, 'krishna', 'account', 25000, 'kamrej')
+
+9. Grouping record of employee who are from "Account" and "Inventory".
+
+q7=" select * from Employee where dept='account' or dept='inventory' group by dept;"
+cur.execute(q7)
+r=cur.fetchall()
+for i in r:
+    print(i)
+con.commit()
+
+output:
+(4, 'radha', 'account', 20000, 'vyara')
+(3, 'ram', 'inventory', 15000, 'bardoli')
+
+10. Print all records based on branch name in descending order.
+
+q8="select * from Employee order by branch desc"
+cur.execute(q8)
+r=cur.fetchall()
+for i in r:
+    print(i)
+
+output:
+(4, 'radha', 'account', 20000, 'vyara')
+(12, 'Bharat', 'hr', 2000, 'vyara')
+(7, 'Sita', 'account', 12500, 'vihan')
+(1, 'om', 'hr', 11000, 'surat')
+(10, ' Kans', 'hr', 3300, 'surat')
+(8, 'Gopi', 'it', 16000, 'navsari')
+(2, 'sai', 'it', 5000, 'kamrej')
+(5, 'krishna', 'account', 25000, 'kamrej')
+(11, 'Laxman', 'it', 6000, 'kamrej')
+(13, 'Balram', 'account', 3000, 'kamrej')
+(15, 'Dev', 'it', 50000, 'kamrej')
+(3, 'ram', 'inventory', 15000, 'bardoli')
+(6, 'Ram', 'hr', 29000, 'bardoli')
+(9, 'Sudama', 'inventory', 20000, 'bardoli')
+(14, 'Sam ', 'inventory', 6000, 'bardoli')
+?
+
+
+
+
+
+
+
+
+
+
+
+
